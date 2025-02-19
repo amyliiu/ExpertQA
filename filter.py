@@ -30,11 +30,49 @@ def filter_question_types(input_file, output_file, question_types_to_filter):
             print(f"  Question: {entry.question}")  # Access the question attribute
 
 
+
+def find_lengths(input_file):
+    total_length = 0
+    count = 0
+    with open(input_file, 'r') as f:
+        data = json.load(f)
+        for entry in data:
+            if(len(entry['answer']) > 500):
+                total_length += len(entry['answer'])
+                count += 1
+                if(count <= 3):
+                    print(entry['answer'])
+    print(count)
+    print(total_length/count)
+
+
+def calculate_average_tokens(input_file):
+    total_tokens = 0
+    count = 0
+
+    with open(input_file, 'r') as f:
+        for line in f:
+            entry = json.loads(line)  # Load each JSON object
+            if(len(entry['answer']) > 500):
+                total_tokens += len(entry['answer'])
+                count += 1  # Increment the count of entries
+
+    if count == 0:
+        return 0  # Avoid division by zero
+
+    print(count)
+    average_tokens = total_tokens / count  # Calculate the average
+    return average_tokens
+
+
 # Example usage
-input_file = "data/r2_compiled_anon.jsonl"
-output_file = "data/filtered_questions.jsonl"
-question_types_to_filter = ["Summarization of information on a topic",
-                            "Advice or suggestions on how to approach a problem",
-                            "Question that describes a hypothetical scenario and asks a question based on this scenario",
-                            "Request for opinion on a topic"]  # Replace with actual question types to filter
-filter_question_types(input_file, output_file, question_types_to_filter)
+# input_file = "data/r2_compiled_anon.jsonl"
+# output_file = "data/filtered_questions.jsonl"
+# question_types_to_filter = ["Summarization of information on a topic",
+#                             "Advice or suggestions on how to approach a problem",
+#                             "Question that describes a hypothetical scenario and asks a question based on this scenario",
+#                             "Request for opinion on a topic"]  # Replace with actual question types to filter
+# filter_question_types(input_file, output_file, question_types_to_filter)
+
+input_file = "protein_description_generation.jsonl"
+print(calculate_average_tokens(input_file))
