@@ -7,7 +7,8 @@ z = open("validation.txt", "r")
 
 indexes = ["id", "SMILES", "description"]
 
-num_chars = 400
+num_chars = 500
+max_chars = 0
 
 output = open("output.jsonl", "w")
 first_line = True
@@ -17,6 +18,8 @@ for line in x:
         continue
     line = line.split("\t")
     if(len(line[2])>num_chars):
+        if(len(line[2])>max_chars):
+            max_chars = len(line[2])
         entry = {
             "id": line[0],
             "SMILES": line[1],
@@ -33,6 +36,8 @@ for line in y:
         continue
     line = line.split("\t")
     if(len(line[2])>num_chars):
+        if(len(line[2])>max_chars):
+            max_chars = len(line[2])
         entry = {
             "id": line[0],
             "SMILES": line[1],
@@ -48,6 +53,8 @@ for line in z:
         continue
     line = line.split("\t")
     if(len(line[2])>num_chars):
+        if(len(line[2])>max_chars):
+            max_chars = len(line[2])    
         entry = {
             "id": line[0],
             "SMILES": line[1],
@@ -56,6 +63,4 @@ for line in z:
         output.write(json.dumps(entry, ensure_ascii=False) + '\n') 
 z.close()
 
-
-
-
+print(max_chars)
